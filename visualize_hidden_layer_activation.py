@@ -20,7 +20,7 @@ def load_model():
     if (Path('./models/convnet_improved_model.json').is_file() == False) | (Path('./models/convnet_improved_model.json').is_file() == False):
         sys.stdout.write('Please train model using basic_model.py first')
         sys.stdout.flush()
-        raise SystemExit
+        #raise SystemExit
 
     with open(model_path) as file:
         model = keras.models.model_from_json(json.load(file))
