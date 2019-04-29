@@ -7,12 +7,13 @@ from keras.datasets import cifar10
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
+import gc
 
 # global static variables
 dtype_mult = 255.0 # unit8
 num_classes = 10
 X_shape = (-1, 32, 32, 3)
-epoch = 200
+epoch = 2
 batch_size = 128
 
 def get_dataset():
@@ -46,17 +47,17 @@ def compile_model(model):
 
 def generate_model():
     # check if model exists if exists then load model from saved state
-    if Path('./models/convnet_model.json').is_file():
+    if Path('./models/convnet_model_test.json').is_file():
         sys.stdout.write('Loading existing model\n\n')
         sys.stdout.flush()
 
-        with open('./models/convnet_model.json') as file:
+        with open('./models/convnet_model_test.json') as file:
             model = keras.models.model_from_json(json.load(file))
             file.close()
 
         # likewise for model weight, if exists load from saved state
-        if Path('./models/convnet_weights.h5').is_file():
-            model.load_weights('./models/convnet_weights.h5')
+        if Path('./models/convnet_weights_test.h5').is_file():
+            model.load_weights('./models/convnet_weights_test.h5')
 
         compile_model(model)
 
@@ -100,7 +101,7 @@ def generate_model():
     # compile has to be done impurely
     compile_model(model)
 
-    with open('./models/convnet_model.json', 'w') as outfile:
+    with open('./models/convnet_model_test.json', 'w') as outfile:
         json.dump(model.to_json(), outfile)
         outfile.close()
 
@@ -121,7 +122,7 @@ def train(model, X_train, y_train, X_test, y_test):
                   nb_epoch=1, validation_data=(X_test, y_test))
         sys.stdout.write('Epoch {} done, saving model to file\n\n'.format(epoch_count))
         sys.stdout.flush()
-        model.save_weights('./models/convnet_weights.h5')
+        model.save_weights('./models/convnet_weights_test.h5')
 
     return model
 
@@ -136,6 +137,7 @@ def main():
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()
     model = generate_model()
     model = train(model, X_train, y_train, X_test, y_test)
+    #gc.collect()
 
 
 if __name__ == "__main__":

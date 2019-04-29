@@ -41,7 +41,7 @@ def get_dataset():
     return X_train, y_train, X_test, y_test
 
 def load_model():
-    if (Path('./models/convnet_improved_model.json').is_file() == False) | (Path('./models/convnet_improved_model.json').is_file() == False):
+    if (Path('./models/convnet_model.json').is_file() == False) | (Path('./models/convnet_model.json').is_file() == False):
         sys.stdout.write('Please train model using basic_model.py first')
         sys.stdout.flush()
         #raise SystemExit
